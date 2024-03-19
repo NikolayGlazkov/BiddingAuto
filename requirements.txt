@@ -3,3 +3,4 @@ Django==5.0.3
 pip==24.0
 setuptools==65.5.0
 sqlparse==0.4.4
+dotenv==0.0.5
