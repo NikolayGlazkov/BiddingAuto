@@ -1,0 +1,6 @@
+*.docx
+*.html
+pycache
+.venv
+config.py
+.env
