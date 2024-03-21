@@ -65,3 +65,7 @@ class Client(models.Model):
         help_text="введите номер",
     )
     discription = models.TextField(verbose_name="заметка", null=True, blank=True)
+
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"

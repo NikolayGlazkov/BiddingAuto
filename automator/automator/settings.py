@@ -56,7 +56,7 @@ ROOT_URLCONF = 'automator.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["/Users/nikolay/Documents/BiddingAuto/automator/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
