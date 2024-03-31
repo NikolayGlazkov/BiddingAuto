@@ -1,6 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.urls import reverse
 # null
 # Если True, Django будет хранить пустые значения как NULL в базе данных.
 # По умолчанию установлено значение False.
@@ -53,6 +53,7 @@ class Client(models.Model):
     cl_inn = models.CharField(
         max_length=15, verbose_name="ИНН", help_text="введите ИНН", unique=True
     )
+    
     cl_snils = models.CharField(
         max_length=15, verbose_name="СНИЛС", help_text="введите СНИЛС", blank=True
     )
@@ -68,4 +69,16 @@ class Client(models.Model):
 
 
     def __str__(self):
-        return f"{self.name} {self.surname}"
+        return f"{self.surname} {self.name} {self.patronymic}"
+    
+    def get_absolute_url(self):
+        return reverse('client', kwargs={"cl_inn":self.pk})
+    
+    class Meta:
+        verbose_name = "список клиентов"
+        verbose_name_plural = "список клиентов"
+        ordering = ["surname","name"] 
+
+
+class list_of_lots():
+    pass
