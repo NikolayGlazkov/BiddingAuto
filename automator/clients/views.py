@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse, redirect,get_object
 from django.http import HttpResponseNotFound, Http404, JsonResponse
 import subprocess
 from .models import *
+from .forms import ClientForm
 
 menu = [
     {"title": "Войти", "url_name": "login"},
@@ -16,7 +17,7 @@ menu = [
 def run_script():
     python_exec_path = "/Users/nikolay/Documents/made_doc_for_ol/.venv/bin/python3"
     # script_path =  '/Users/nikolay/Documents/made_doc_for_ol/doc_made.py'
-    script_path = "/Users/nikolay/Documents/BiddingAuto/temp.py"
+    script_path = "/Users/nikolay/Documents/made_doc_for_ol/doc_made.py"
     result = subprocess.run([python_exec_path, script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return result.stdout, result.stderr
 
@@ -46,7 +47,15 @@ def show_client(request,cl_inn):
     return render(request, "clients/show_client.html", {"client": client})
 
 def add_client(request):
-    return HttpResponse("добавить клиента")
+    if request.method == 'POST':
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('clients/index.html')  # Замените 'success_url' на адрес, куда вы хотите перенаправить пользователя после успешного заполнения формы
+    else:
+        form = ClientForm()
+    
+    return render(request, 'clients/my_template.html', {'form': form})
 
 def contact(request):
     return HttpResponse("контакты")

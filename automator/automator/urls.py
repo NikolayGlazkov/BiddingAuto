@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path,include
 from clients.views import pageNotFound
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include("clients.urls"))
+    path("",include("clients.urls")),
+    path("lotlist/",include("clients.urls"))
 ]
 
 handler404 = pageNotFound

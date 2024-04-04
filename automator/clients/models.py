@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.urls import reverse
+
 # null
 # Если True, Django будет хранить пустые значения как NULL в базе данных.
 # По умолчанию установлено значение False.
@@ -20,7 +21,9 @@ class Client(models.Model):
         max_length=30, verbose_name="фамилия", help_text="введите фамилию"
     )
     name = models.CharField(max_length=30, verbose_name="имя", help_text="введите имя")
-    pl_birth = models.CharField(max_length=30, verbose_name="место рождения", help_text="введите место рождения")
+    pl_birth = models.CharField(
+        max_length=30, verbose_name="место рождения", help_text="введите место рождения"
+    )
     birth_date = models.DateField(
         verbose_name="дата рождения", help_text="введите дату рождения"
     )
@@ -53,7 +56,7 @@ class Client(models.Model):
     cl_inn = models.CharField(
         max_length=15, verbose_name="ИНН", help_text="введите ИНН", unique=True
     )
-    
+
     cl_snils = models.CharField(
         max_length=15, verbose_name="СНИЛС", help_text="введите СНИЛС", blank=True
     )
@@ -67,18 +70,55 @@ class Client(models.Model):
     )
     discription = models.TextField(verbose_name="заметка", null=True, blank=True)
 
-
     def __str__(self):
         return f"{self.surname} {self.name} {self.patronymic}"
-    
+
     def get_absolute_url(self):
-        return reverse('client', kwargs={"cl_inn":self.pk})
-    
+        return reverse("client", kwargs={"cl_inn": self.pk})
+
     class Meta:
         verbose_name = "список клиентов"
         verbose_name_plural = "список клиентов"
-        ordering = ["surname","name"] 
+        ordering = ["surname", "name"]
 
 
-class list_of_lots():
-    pass
+# class lots_list_bank(models.Model):
+#     client = models.ForeignKey(Client, on_delete = models.CASCADE) #  у одного клиента может быть много лотов, должна быть ссылка на Фио клиента и его номер телефона, добавь метод выше
+#     lot_efrsb_urls = models.URLField(
+#         max_length=200,
+#         verbose_name="Сылка на ЕФРСБ",
+#         help_text="Введите cылку на ЕФРСБ",
+#     )
+#     lot_plase_urls = models.URLField(
+#         max_length=200,
+#         verbose_name="Сылка на ЕФРСБ",
+#         help_text="Введите cылку на ЕФРСБ",
+#     )
+#     obligator = models.CharField(
+#         max_length=50, verbose_name="должник", help_text="Имя должнеика"
+#     )
+#     # proc_type = models."Помоги мне chatGPT" поле с выбором из одгого вырианта в списке [аукцион, публичное предложение] далее публичное предложение - ПП
+
+#     end_of_feed = models.DateField(
+#         verbose_name="Конец подачи заявки", help_text="веедите дату конца подачи заявки"
+#     )
+#     auction_day = models.DateField(
+#         verbose_name="Дата проведения аукциона",
+#         help_text="веедите дату проведения аукциона",
+#     )
+#     totl_price = models.DecimalField(
+#         verbose_name="Цена лота",
+#         help_text="Введите цену покупки лота, либо цену подачи на ПП",
+#     )  #  по умолчанию пустое поле
+
+#     # action_sttus = models."Помоги мне chatGPT" выбор статус таргов [проведены, не проведены,] по умолчанию пусто
+
+#     # feed_sttus = models."Помоги мне chatGPT" выбор статуса заявки [подано, не подано,] по умолчанию пусто
+
+#     feed_price = models.DecimalField(
+#         verbose_name="введите цену заявки", help_text="введите цену за работу"
+#     )
+#     price_procent = models.DecimalField(
+#         verbose_name="введите процент за агентское вознограждение",
+#         help_text="процент за агентское вознограждение в случае победы",
+#     )  # по умолчанию пустое поле
