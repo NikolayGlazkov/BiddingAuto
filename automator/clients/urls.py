@@ -9,5 +9,8 @@ urlpatterns = [
     path("contact/", contact, name="contact"),
     path("login/", login, name="login"),
     path("show_client/",show_client,name="show_client"),
-    path('run-script/', run_script_view, name='run_script'),    
+    path('run-script/', run_script_view, name='run_script'),
+    path("add_lot/", add_lot, name="add_lot"),
+    path('clients/<int:client_id>/', client_detail, name='client_detail'),
+
 ]

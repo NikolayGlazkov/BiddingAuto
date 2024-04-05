@@ -3,13 +3,13 @@ from django.http import HttpResponseNotFound, Http404, JsonResponse
 import subprocess
 from .models import *
 from .forms import ClientForm
-
+from lotslist.views import *
 menu = [
     {"title": "Войти", "url_name": "login"},
     {"title": "Главная", "url_name": "home"},
     {"title": "Список клиентов", "url_name": "clients_list"},
     {"title": "Добавить клиента", "url_name": "add_client"},
-    # {"title": "найти клиента", "url_name": "client"},
+    {"title": "добавить лот", "url_name": "add_lot"},
     {"title": "Контакты", "url_name": "contact"},
     {"title": "О нас", "url_name": "about"},
 ]
@@ -40,7 +40,9 @@ def clients_list(request):
     context = {'clients':clients,"menu":menu,'title':"главная страница"}
     return render(request, "clients/client_list.html", context=context)
 
-
+def client_detail(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    return render(request, 'clients/client_detail.html', {'client': client})
 
 def show_client(request,cl_inn):
     client = get_object_or_404(Client,cl_inn="561211426761")
@@ -51,7 +53,7 @@ def add_client(request):
         form = ClientForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('clients/index.html')  # Замените 'success_url' на адрес, куда вы хотите перенаправить пользователя после успешного заполнения формы
+            return redirect("home")  # Замените 'success_url' на адрес, куда вы хотите перенаправить пользователя после успешного заполнения формы
     else:
         form = ClientForm()
     
