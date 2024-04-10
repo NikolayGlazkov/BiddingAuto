@@ -81,7 +81,10 @@ class Client(models.Model):
         return f"{self.surname} {self.name} {self.patronymic}"
 
     def get_absolute_url(self):
-        return reverse("client", kwargs={"cl_inn": self.pk})
+        return reverse("show_client", kwargs={"cl_inn": self.cl_inn})
+    
+    def full_name(self):
+        return f"{self.surname} {self.name} {self.patronymic}".strip()
 
     class Meta:
         verbose_name = "список клиентов"

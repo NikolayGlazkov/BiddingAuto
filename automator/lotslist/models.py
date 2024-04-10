@@ -13,8 +13,8 @@ class LotListBank(models.Model):
     ]
     proc_type = models.CharField(max_length=20, choices=PROCEDURE_TYPE_CHOICES, verbose_name="Тип процедуры")
 
-    end_of_feed = models.DateField(verbose_name="Конец подачи заявки")
-    auction_day = models.DateField(verbose_name="Дата проведения аукциона")
+    end_of_feed = models.DateTimeField(verbose_name="Конец подачи заявки")
+    auction_day = models.DateTimeField(verbose_name="Дата проведения аукциона")
     total_price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Цена лота", blank=True, null=True)
 
     ACTION_STATUS_CHOICES = [

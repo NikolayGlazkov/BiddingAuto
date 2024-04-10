@@ -4,15 +4,8 @@ import subprocess
 from .models import *
 from .forms import ClientForm
 from lotslist.views import *
-menu = [
-    {"title": "Войти", "url_name": "login"},
-    {"title": "Главная", "url_name": "home"},
-    {"title": "Список клиентов", "url_name": "clients_list"},
-    {"title": "Добавить клиента", "url_name": "add_client"},
-    {"title": "добавить лот", "url_name": "add_lot"},
-    {"title": "Контакты", "url_name": "contact"},
-    {"title": "О нас", "url_name": "about"},
-]
+from lotslist.models import *
+
 
 def run_script():
     python_exec_path = "/Users/nikolay/Documents/made_doc_for_ol/.venv/bin/python3"
@@ -26,38 +19,7 @@ def run_script_view(request):
     return JsonResponse({'stdout': stdout, 'stderr': stderr})
 
 def index(request):
-    return render(
-        request, "clients/index.html", {"menu": menu, "title": "главная страница"}
-    )
-
-
-def about(request):
-    return render(request, "clients/about.html", {"menu": menu, "title": "о сайте"})
-
-
-def clients_list(request):
-    clients = Client.objects.all()
-    context = {'clients':clients,"menu":menu,'title':"главная страница"}
-    return render(request, "clients/client_list.html", context=context)
-
-def client_detail(request, client_id):
-    client = get_object_or_404(Client, id=client_id)
-    return render(request, 'clients/client_detail.html', {'client': client})
-
-def show_client(request,cl_inn):
-    client = get_object_or_404(Client,cl_inn="561211426761")
-    return render(request, "clients/show_client.html", {"client": client})
-
-def add_client(request):
-    if request.method == 'POST':
-        form = ClientForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("home")  # Замените 'success_url' на адрес, куда вы хотите перенаправить пользователя после успешного заполнения формы
-    else:
-        form = ClientForm()
-    
-    return render(request, 'clients/my_template.html', {'form': form})
+     return render(request,"clients/index.html")
 
 def contact(request):
     return HttpResponse("контакты")
@@ -65,6 +27,60 @@ def contact(request):
 def login(request):
    return HttpResponse("авторизация")
 
+def about(request):
+    return render(request, "clients/about.html", {"title": "о сайте"})
+
+
+def clients_list(request):
+    clients = Client.objects.all()
+    context = {'clients':clients,'title':"главная страница"}
+    return render(request, "clients/client_list.html", context=context)
+
+def edit_client(request, cl_inn):
+    user = get_object_or_404(Client, cl_inn = cl_inn)
+    if request.method == "POST":
+        form = ClientForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('clients_list')  # Предположим, у вас есть URL с именем 'users_list', который ведёт к списку пользователей
+    else:
+        form = ClientForm(instance=user)
+    
+    return render(request, '/Users/nikolay/Documents/BiddingAuto/automator/templates/clients/edit_client.html', {'form': form})
+
+def find_client(request):
+    if request.method == 'GET':
+        query = request.GET.get('query')  # Получаем значение запроса поиска
+        if query:
+            query = query.capitalize()
+            # Выполняем поиск клиента по ИНН или фамилии
+            clients = Client.objects.filter(cl_inn=query) | Client.objects.filter(surname=query)
+            return render(request, 'clients/client_list.html', {'clients': clients, 'title': 'Результаты поиска'})
+    # Если запрос не был выполнен или не был найден клиент, возвращаем пустую страницу
+    return render(request, 'clients/client_list.html', {'clients': [], 'title': 'Результаты поиска'})
+
+def show_client(request, cl_inn):
+    client = get_object_or_404(Client, cl_inn=cl_inn)
+    # Получение всех лотов, принадлежащих этому клиенту
+    lots = LotListBank.objects.filter(client=client)
+    
+    return render(request, 'clients/show_client.html', {'client': client, 'lots': lots})
+
+def add_client(request):
+    if request.method == 'POST':
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("clients_list")  # Замените 'success_url' на адрес, куда вы хотите перенаправить пользователя после успешного заполнения формы
+    else:
+        form = ClientForm()
+    
+    return render(request, 'clients/add_client.html', {'form': form})
+
+def delete_client(request,cl_inn):
+    client = get_object_or_404(Client,cl_inn=cl_inn)
+    client.delete()
+    return redirect("clients_list")
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
