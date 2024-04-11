@@ -18,7 +18,24 @@ def add_lot(request,cl_inn):
     
     return render(request, 'lotslist/add_lots.html', {'form': form})
 
+
+
+def edit_lot(request, id):
+    lot = get_object_or_404(LotListBank, id=id)
+    if request.method == "POST":
+        form = LotForm(request.POST, instance=lot)
+        if form.is_valid():
+            form.save()
+            return redirect('lotlist') 
+    else:
+        form = LotForm(instance=lot)
+    
+    return render(request, 'lotslist/edit_lot.html', {'form': form})
+
+
 def lot_list(request):
     lots = LotListBank.objects.all()
     context = {'lots':lots,}
     return render(request, "lotslist/lot_list.html", context=context)
+
+
