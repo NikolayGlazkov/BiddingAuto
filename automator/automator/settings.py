@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "clients.apps.ClientsConfig",
-    "lotslist.apps.LotslistConfig"
+    "lotslist.apps.LotslistConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

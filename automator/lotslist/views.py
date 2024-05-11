@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, HttpResponse, redirect,get_object
 from django.http import HttpResponseNotFound, Http404, JsonResponse
 from .forms import LotForm  # Убедитесь, что правильно импортировали LotForm
 from .models import *
+from django.http import JsonResponse
+from .models import LotListBank
+from .serializers import LotSerializer
+from rest_framework import generics
 
 def add_lot(request,cl_inn):
     client = get_object_or_404(Client, cl_inn=cl_inn)
@@ -17,7 +21,6 @@ def add_lot(request,cl_inn):
         form = LotForm()  # Используйте здесь LotForm вместо LotListBank
     
     return render(request, 'lotslist/add_lots.html', {'form': form})
-
 
 
 def edit_lot(request, id):
@@ -39,3 +42,23 @@ def lot_list(request):
     return render(request, "lotslist/lot_list.html", context=context)
 
 
+# def fetch_lot_efrsb_urls():
+#     lots = LotListBank.objects.all()
+#     urls = [lot.lot_efrsb_urls for lot in lots]
+#     return urls
+
+class LotListAPIView(generics.ListAPIView):
+    queryset = LotListBank.objects.all()
+    serializer_class = LotSerializer
+
+# не работает:
+def lot_events(request):
+    lots = LotListBank.objects.all()
+    lot_data = [
+        {
+            'title': f'Лот {lot.id}',
+            'start': lot.auction_day.strftime('%Y-%m-%d'), # или lot.end_of_feed, в зависимости от того, какую дату вы хотите использовать
+            'url': f'/path/to/lot/{lot.id}/'  # Ссылка для просмотра деталей лота
+        } for lot in lots
+    ]
+    return JsonResponse(lot_data, safe=False)

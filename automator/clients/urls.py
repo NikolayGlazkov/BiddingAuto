@@ -17,4 +17,5 @@ urlpatterns = [
     path("add_lot/<int:cl_inn>", add_lot, name="add_lot"),
     path("lot_list/", lot_list, name="lot_list"),
     path("edit_lot/<int:id>/",edit_lot,name="edit_lot"),
+    path('events/', lot_events, name='lot-events'),
 ]
