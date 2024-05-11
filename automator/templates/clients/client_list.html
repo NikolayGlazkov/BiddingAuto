@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{% url 'find_client' %}" method="GET">
+    <button type="submit">Найти клиента</button>
+    <input type="text" name="query" placeholder="Введите ИНН или фамилию">
+</form>
+<a href="{% url 'add_client' %}"><button>Добавить клиента</button></a>
+
+
+<title>{{ title }}</title>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Фамилия Имя</th>
+            <th>Номер телефона</th>
+            <th>Адрес почты</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in clients %}
+        <tr>
+            <td><a href="{% url 'show_client' c.cl_inn %}">{{ c.full_name }}</a></td>
+            <td>{{ c.cl_phone }}</td>
+            <td>{{ c.cl_email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

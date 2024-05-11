@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Список лотов</h1>
+
+<table border = 1>
+    <thead>
+        <tr>
+            <th>ID лота</th>
+            <th>Клиент</th>
+            <th>Ссылка на ЕФРСБ</th>
+            <th>Номер лотов клиента</th>
+            <th>Местопроведение торга</th>
+            <th>Действие</th>
+            <th>Тип процедуры</th>
+            <th>Конец подачи заявки</th>
+            <th>Дата аукциона</th>
+            <th>Цена лота</th>
+            <th>Статус торгов</th>
+            <th>Статус заявки</th>
+            <th>Цена заявки</th>
+            <th>Процент за вознаграждение</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lot in lots %}
+        <tr>
+            <td>{{ lot.id }}</td>
+            <td><a href="{% url 'show_client' cl_inn=lot.client.cl_inn %}">{{ lot.client.full_name }}</a></td> <!-- Предполагается, что у клиента есть поле full_name -->
+            <td><a href="{{ lot.lot_efrsb_urls }}">Ссылка</a></td>
+            <td>{{ lot.lot_number }}</td>
+            <td><a href="{{ lot.lot_place_urls }}">Ссылка</a></td>
+            <td><a href="{% url 'edit_lot' lot.id %}">редактировать запись</a></td>
+            <td>{{ lot.get_proc_type_display }}</td>
+            <td>{{ lot.end_of_feed }}</td>
+            <td>{{ lot.auction_day }}</td>
+            <td>{{ lot.total_price }}</td>
+            <td>{{ lot.get_action_status_display }}</td>
+            <td>{{ lot.get_feed_status_display }}</td>
+            <td>{{ lot.feed_price }}</td>
+            <td>{{ lot.price_procent }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

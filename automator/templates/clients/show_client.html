@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="client-details">
+    <h2>Клиент: {{ client.full_name }}</h2>
+    <p>Город: {{ client.city }}</p>
+    <p>ИНН: {{ client.cl_inn }}</p>
+    <p>Телефон {{ client.cl_phone }}</p>
+    <a href="{% url 'edit_client' client.cl_inn %}"><button>редактировать запись</button></a>
+    <a href="{% url 'delete_client' client.cl_inn %}" onclick="return confirm('Вы уверены?')"><button>Удалить
+            запись</button></a>
+    <a href="{% url 'add_lot' client.cl_inn %}"><button>добавить лот</button></a>
+
+    <div class="lots-list">
+        <h3>Лоты клиента</h3>
+        {% if lots %}
+        <ul>
+            {% for lot in lots %}
+            <b>Место проведения:</b>
+            <li><a href="{{ lot.lot_place_urls }}">{{ lot.lot_place_urls }}</a>
+                <br>Номер Лота: {{ lot.lot_number }} <br>
+                дата проведения {{ lot.end_of_feed }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Лоты не найдены.</p>
+        {% endif %}
+    </div>
+
+
+    {% endblock %}

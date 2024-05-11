@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <title>{{ title }}</title>
+<p>Содержимое главной страницы</p>
+
+<button onclick="runPythonScript()">создать документ</button>
+
+<script>
+function runPythonScript() {
+  fetch('/run-script/')
+    .then(response => response.json())
+    .then(data => alert(data.stdout))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+</script>
+<button onclick="runPythonScript()">создать документ</button>
+</div>
+
+<link href='/static/fullcalendar/main.css' rel='stylesheet' />
+<script src='/static/fullcalendar/main.js'></script>
+<div id='calendar'></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    events: '/path/to/your/events/'
+  });
+  calendar.render();
+});
+</script>
+
+
+{% endblock %}

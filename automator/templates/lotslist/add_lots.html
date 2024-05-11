@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- <a href="{% url 'home' %}"><button>вернуться на главную</button></a>
+<a href="{% url 'clients_list' %}"><button>список клиентов</button></a> -->
+<title>Доюавить лот</title>
+</head>
+
+<body>
+    <h2>Заполните форму</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+    {% if form.errors %}
+    <ul>
+        {% for field in form %}
+        {% for error in field.errors %}
+        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+        {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+        <li><strong>Общая ошибка:</strong> {{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% endblock %}
