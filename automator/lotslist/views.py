@@ -56,7 +56,7 @@ def lot_events(request):
     lots = LotListBank.objects.all()
     lot_data = [
         {
-            'title': f'Лот {lot.id}',
+            'title': f'Лоhт {lot.id}',
             'start': lot.auction_day.strftime('%Y-%m-%d'), # или lot.end_of_feed, в зависимости от того, какую дату вы хотите использовать
             'url': f'/path/to/lot/{lot.id}/'  # Ссылка для просмотра деталей лота
         } for lot in lots
